@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon",
     "build": "tsc",
-    "start": "npm run build && node dist/index.js"
+    "start": "npm run build && node dist/index.js",
+    "orm": "tsx src/orm-cli.ts"
   },
   "keywords": [],
   "author": "Gautam",

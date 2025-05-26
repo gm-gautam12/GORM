@@ -19,9 +19,14 @@ export class QueryBuilder {
     }
 
     static updateById(entity: EntityDefinition): string {
-        const updates = entity.properties.map(prop => `\`${prop.name}\` = ?`).join(', ');
-        return `UPDATE \`${entity.name}\` SET ${updates} WHERE id = ?;`;
+    const updates = entity.properties
+        .filter(prop => prop.name !== 'id') // ✅ skip primary key
+        .map(prop => `\`${prop.name}\` = ?`)
+        .join(', ');
+    
+    return `UPDATE \`${entity.name}\` SET ${updates} WHERE id = ?;`;
     }
+
 
     static findById(entity: EntityDefinition): string {
         return `SELECT * FROM \`${entity.name}\` WHERE id = ?;`;

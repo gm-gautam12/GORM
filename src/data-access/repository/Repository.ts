@@ -34,7 +34,8 @@ export class Repository<T> {
     }
 
     async updateById(id: number, entity: T): Promise<void> {
-        const row = DataMapper.toRow(entity, this.entityDef);
+        let row = DataMapper.toRow(entity, this.entityDef);
+        delete row['id'];
         const values = Object.values(row);
         values.push(id); // Add id for the WHERE clause
         await db.query(QueryBuilder.updateById(this.entityDef), values);
