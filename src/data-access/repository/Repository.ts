@@ -1,0 +1,41 @@
+import { db } from '../mysql-connection/MySQLConnection.js';
+import { QueryBuilder } from '../query-builder/QueryBuilder.js';
+import { DataMapper } from '../data-mapper/DataMapper.js';
+import { TransactionManager } from '../transaction-manager/TransactionManager.js';
+import { EntityDefinition } from '../../data-model/entity-definition/EntityDefinition.js';
+
+
+export class Repository<T> {
+
+    constructor(private entityDef: EntityDefinition) {}
+
+    async create(entity:T):Promise<void> {
+        const query = QueryBuilder.insert(this.entityDef);
+        const value = this.entityDef.properties.map(p => (entity as any)[p.name]);
+        await db.query(query, value);
+    }
+
+    async findAll() : Promise<T[]> {
+        const [rows] = await db.query(QueryBuilder.findAll(this.entityDef));
+        return (rows as any[]).map(row => DataMapper.toEntity<T>(row,this.entityDef));
+    }
+
+    async deleteById(id: number): Promise<void> {
+        await db.query(QueryBuilder.deleteById(this.entityDef),[id]);
+    }
+
+    async updateById(id: number, entity: T): Promise<void> {
+        const row = DataMapper.toRow(entity, this.entityDef);
+        const values = Object.values(row);
+        values.push(id); // Add id for the WHERE clause
+        await db.query(QueryBuilder.updateById(this.entityDef), values);
+    }
+
+    async findById(id: number): Promise<T | null> {
+        const [rows] = await db.query(QueryBuilder.findById(this.entityDef), [id]);
+        if (!Array.isArray(rows) || rows.length === 0) {
+        return null; // No entity found
+        }
+        return DataMapper.toEntity<T>(rows[0], this.entityDef);
+    }
+}
