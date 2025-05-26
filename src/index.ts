@@ -5,6 +5,8 @@ export * from './data-access/data-access.js';
 import { defineProperty, generateSchema, } from './data-model/data-model.js';
 import { EntityDefinition } from './data-model/entity-definition/EntityDefinition.js';
 import { Repository } from './data-access/repository/Repository.js';
+import {generateMigration} from './migration/migration-generator.js';
+
 
 // a sample entity
 const UserEntity: EntityDefinition = {
@@ -16,14 +18,16 @@ const UserEntity: EntityDefinition = {
   ]
 };
 
-// Generate DDL and print to console
+
+
 console.log('--- Generated DDL ---');
 const schema = generateSchema([UserEntity]);
 console.log(schema);
 
-// Optional: Run sample DB operation (make sure `.env` is configured)
+
+
 type User = {
-  id?: number; // Optional for create operations
+  id?: number;
   username: string;
   email: string;
 };
@@ -31,17 +35,25 @@ type User = {
 const userRepo = new Repository<User>(UserEntity);
 async function testRepository() {
 
-  await userRepo.create({
-    username: 'gautam13', 
-    email: 'gautam13@example.com'});
+//   await userRepo.create({
+//     username: 'gautam13', 
+//     email: 'gautam13@example.com'});
 
   // Example findAll
-  const users = await userRepo.findAll();
+  const users = await userRepo.findById(1);
   console.log('Users from DB:', users);
 }
 
 // Uncomment below to run DB operations
- testRepository().catch(console.error);
+ //testRepository().catch(console.error);
+
+
+import {runMigrations} from './migration/migration-runner.js';
+
+runMigrations().catch(console.error);
 
 
 
+
+
+await generateMigration([UserEntity], 'create_user_table');
