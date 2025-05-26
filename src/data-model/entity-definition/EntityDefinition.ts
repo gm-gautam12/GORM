@@ -17,7 +17,7 @@ export interface Property {
 
 export interface Relationship {
     type: 'one-to-one' | 'one-to-many' | 'many-to-many';
-    targetEntity: string; // The name of the target entity
+    targetEntity: string;
     inverseSide?: string;
     joinColumn?: string;
 };

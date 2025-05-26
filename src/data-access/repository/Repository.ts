@@ -1,7 +1,6 @@
 import { db } from '../mysql-connection/MySQLConnection.js';
 import { QueryBuilder } from '../query-builder/QueryBuilder.js';
 import { DataMapper } from '../data-mapper/DataMapper.js';
-import { TransactionManager } from '../transaction-manager/TransactionManager.js';
 import { EntityDefinition } from '../../data-model/entity-definition/EntityDefinition.js';
 
 
@@ -37,14 +36,14 @@ export class Repository<T> {
         let row = DataMapper.toRow(entity, this.entityDef);
         delete row['id'];
         const values = Object.values(row);
-        values.push(id); // Add id for the WHERE clause
+        values.push(id);
         await db.query(QueryBuilder.updateById(this.entityDef), values);
     }
 
     async findById(id: number): Promise<T | null> {
         const [rows] = await db.query(QueryBuilder.findById(this.entityDef), [id]);
         if (!Array.isArray(rows) || rows.length === 0) {
-        return null; // No entity found
+        return null;
         }
         return DataMapper.toEntity<T>(rows[0], this.entityDef);
     }

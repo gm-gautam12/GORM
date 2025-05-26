@@ -20,7 +20,7 @@ export class QueryBuilder {
 
     static updateById(entity: EntityDefinition): string {
     const updates = entity.properties
-        .filter(prop => prop.name !== 'id') // ✅ skip primary key
+        .filter(prop => prop.name !== 'id') 
         .map(prop => `\`${prop.name}\` = ?`)
         .join(', ');
     

@@ -1,6 +1,5 @@
 import { EntityDefinition } from '../entity-definition/EntityDefinition.js';
-import { PropertyDefinition } from '../property-definition/PropertyDefinition.js';
-import { defineRelationship } from '../relationship-definition/RelationshipDefinition.js';
+
 
 
 export function generateSchema(entities: EntityDefinition[]): string {
