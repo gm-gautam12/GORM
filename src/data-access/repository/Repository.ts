@@ -9,11 +9,20 @@ export class Repository<T> {
 
     constructor(private entityDef: EntityDefinition) {}
 
-    async create(entity:T):Promise<void> {
-        const query = QueryBuilder.insert(this.entityDef);
-        const value = this.entityDef.properties.map(p => (entity as any)[p.name]);
-        await db.query(query, value);
-    }
+    async create(entity: T): Promise<void> {
+  ///// Filter out 'id' (or any AUTO_INCREMENT field)
+  const insertableProps = this.entityDef.properties.filter(p => p.name !== 'id');
+  
+  ///// Build query only with insertable properties
+  const query = QueryBuilder.insert({
+    ...this.entityDef,
+    properties: insertableProps,
+  });
+
+  const values = insertableProps.map(p => (entity as any)[p.name]);
+  await db.query(query, values);
+}
+
 
     async findAll() : Promise<T[]> {
         const [rows] = await db.query(QueryBuilder.findAll(this.entityDef));

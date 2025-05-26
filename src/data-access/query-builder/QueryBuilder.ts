@@ -3,11 +3,12 @@ import { EntityDefinition } from "../../data-model/entity-definition/EntityDefin
 
 export class QueryBuilder {
 
-    static insert(entity: EntityDefinition): string {
-        const columns = entity.properties.map(prop => `\`${prop.name}\``).join(', ');
-        const values = entity.properties.map(prop => `?`).join(', ');
-        return `INSERT INTO \`${entity.name}\` (${columns}) VALUES (${values});`;
+    static insert(entityDef: EntityDefinition): string {
+    const columns = entityDef.properties.map(p => `\`${p.name}\``).join(', ');
+    const placeholders = entityDef.properties.map(() => `?`).join(', ');
+    return `INSERT INTO \`${entityDef.name}\` (${columns}) VALUES (${placeholders});`;
     }
+
 
     static findAll(entity: EntityDefinition): string {
         return `SELECT * FROM \`${entity.name}\`;`;

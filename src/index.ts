@@ -32,8 +32,8 @@ const userRepo = new Repository<User>(UserEntity);
 async function testRepository() {
 
   await userRepo.create({
-    username: 'gautam12', 
-    email: 'gautam12@example.com'});
+    username: 'gautam13', 
+    email: 'gautam13@example.com'});
 
   // Example findAll
   const users = await userRepo.findAll();
