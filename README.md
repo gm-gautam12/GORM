@@ -1,4 +1,4 @@
-<h1 align="center" id="title">GORM - custom ORM</h1>
+<h1 align="center" id="title">GORM - custom ORM </h1>
 
 <p align="center"><img src="https://miro.medium.com/v2/resize:fit:414/format:webp/1*wSBJOgnE198q6iQoG9lbaA.jpeg" alt="project-image"></p>
 
